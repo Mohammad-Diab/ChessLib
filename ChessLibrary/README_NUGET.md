@@ -1,6 +1,6 @@
 ![knight](https://user-images.githubusercontent.com/67554762/171267199-45341351-5968-4f68-802d-2e80136ea4ab.png)
 
-# Gera Chess Library
+# Gera Chess Library – .NET Standard 2.1 Fork
 
 Develop your chess app with C# lib and &hearts; from Geras1mleo
 

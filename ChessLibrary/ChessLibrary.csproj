@@ -1,49 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>enable</Nullable>
-                <Description>Chess logic made with C# and ♥ by Geras1mleo. SAN and FEN parsing/generation, moves validation, legal positions generations, auto endgame detection (insufficient material, threefold repetition, fifty move rule), event handlers and much more!</Description>
-                <Title>Gera.Chess</Title>
-                <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-                <TargetFramework>net8.0</TargetFramework>
-	</PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Title>Gera.Chess.Standard</Title>
+    <Description>Fork of Gera.Chess library adapted for .NET Standard 2.1. Supports SAN and FEN parsing, move validation, legal position generation, auto endgame detection (insufficient material, repetition, fifty-move rule), event handlers, and more!</Description>
+    <Authors>Mohammad Diab</Authors>
+    <PackageTags>chess;C#;SAN;FEN;.NET Standard;game logic</PackageTags>
+    <RepositoryUrl>https://github.com/Mohammad-Diab/ChessLib</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
 
-	<ItemGroup>
-		<None Include="..\knight.png">
-		  <Pack>True</Pack>
-		  <PackagePath>\</PackagePath>
-		</None>
-		<None Include="..\.editorconfig" Link=".editorconfig" />
-		<None Include="..\LICENSE.md">
-			<Pack>True</Pack>
-			<PackagePath>\</PackagePath>
-		</None>
-	</ItemGroup>
+  </PropertyGroup>
 
-	<ItemGroup>
-	  <PackageReference Include="Ardalis.SmartEnum" Version="2.0.1" />
-	</ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Ardalis.SmartEnum" Version="8.2.0" />
+  </ItemGroup>
 
-	<ItemGroup>
-	  <None Include="README_NUGET.md" Pack="true" PackagePath=""/>
-	</ItemGroup>
-	<PropertyGroup>
-		<GenerateDocumentationFile>true</GenerateDocumentationFile>
-		<DebugType>embedded</DebugType>
-		<OutputType>Library</OutputType>
-		<RootNamespace>Chess</RootNamespace>
-		<Authors>Geras1mleo</Authors>
-		<Copyright>Copyright (c) 2024 Geras1mleo</Copyright>
-		<PackageProjectUrl>https://www.nuget.org/packages/Gera.Chess/</PackageProjectUrl>
-		<PackageReadmeFile>README_NUGET.md</PackageReadmeFile>
-		<RepositoryUrl>https://github.com/Geras1mleo/Chess</RepositoryUrl>
-		<PackageTags>chess;chessboard;chess-game;chess-position;standard-algebraic-notation;chess-move;forsyth-edwards-notation;chess-validator;chess-variations</PackageTags>
-                <PackageReleaseNotes>End of support for 6.0, migration to 8.0, fix small issues</PackageReleaseNotes>
-		<PackageIcon>knight.png</PackageIcon>
-		<PackageId>Gera.Chess</PackageId>
-		<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
-		<RepositoryType>git</RepositoryType>
-		<Version>1.2.0</Version>
-	</PropertyGroup>
 </Project>

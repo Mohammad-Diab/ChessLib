@@ -1,237 +1,233 @@
-﻿// *****************************************************
-// *                                                   *
-// * O Lord, Thank you for your goodness in our lives. *
-// *     Please bless this code to our compilers.      *
-// *                     Amen.                         *
-// *                                                   *
-// *****************************************************
-//                                    Made by Geras1mleo
+﻿
+using System.Text;
+using System.Text.RegularExpressions;
 
-namespace Chess;
-
-/// <summary>
-/// Move on chess board
-/// </summary>
-public class Move
+namespace Chess
 {
     /// <summary>
-    /// Whether Positions are initialized
+    /// Move on chess board
     /// </summary>
-    public bool HasValue => OriginalPosition.HasValue && NewPosition.HasValue;
-
-    /// <summary>
-    /// Moved Piece
-    /// </summary>
-    public Piece Piece { get; internal set; }
-
-    /// <summary>
-    /// Original position of moved piece
-    /// </summary>
-    public Position OriginalPosition { get; internal set; }
-
-    /// <summary>
-    /// New Position of moved piece
-    /// </summary>
-    public Position NewPosition { get; internal set; }
-
-    /// <summary>
-    /// Captured piece (if exist) or null
-    /// </summary>
-    public Piece? CapturedPiece { get; internal set; }
-
-    /// <summary>
-    /// Move additional parameter
-    /// This property gives move information about a move
-    /// When one of the following moves occurs, we need info about:
-    /// 1. Promotion: To which figure (Queen or another)?
-    /// 2. Castle: King/Queen side castle?
-    /// 3. En Passant: What is the position of the pawn that has been captured?
-    /// </summary>
-    public IMoveParameter? Parameter { get; internal set; }
-
-    /// <summary>
-    /// Move places opponent's king in check? => true
-    /// </summary>
-    public bool IsCheck { get; internal set; }
-
-    /// <summary>
-    /// Move places opponent's king in checkmate => true
-    /// </summary>
-    public bool IsMate { get; internal set; }
-
-    /// <summary>
-    /// Move in SAN Notation<br/>
-    /// -> Use board.MoveToSan() to get san string for this move according to your board positions
-    /// </summary>
-    public string? San { get; internal set; }
-
-    /// <summary>
-    /// Move is En Passant
-    /// </summary>
-    public bool IsEnPassant => this.Parameter is MoveEnPassant;
-
-    /// <summary>
-    /// Move is castling
-    /// </summary>
-    public bool IsCastling => this.Parameter is MoveCastle;
-
-    /// <summary>
-    /// Move is promotion
-    /// </summary>
-    public bool IsPromotion => this.Parameter is MovePromotion;
-
-    /// <summary>
-    /// Promoted piece or null when there is no promotion.
-    /// </summary>
-    public Piece? Promotion => this.Parameter is MovePromotion promotion ? new Piece(Piece.Color, promotion.PromotionResult) : null;
-
-    /// <summary>
-    /// Initializes new Move object by given positions
-    /// </summary>
-    public Move(Position originalPosition, Position newPosition)
+    public class Move
     {
-        OriginalPosition = originalPosition;
-        NewPosition = newPosition;
-    }
+        /// <summary>
+        /// Whether Positions are initialized
+        /// </summary>
+        public bool HasValue => OriginalPosition.HasValue && NewPosition.HasValue;
 
-    /// <summary>
-    /// Initializes new Move from long move notation
-    /// </summary>
-    /// <param name="move">
-    /// Move as long string<br/>
-    /// ex.:{wr - a1 - h8 - bq - e.p. - +}<br/>
-    /// Or: {a1 - h8}<br/>
-    /// See: move.ToString()
-    /// </param>
-    /// <exception cref="ChessArgumentException">Move didn't match regex pattern</exception>
-    public Move(string move)
-    {
-        move = move.ToLower();
+        /// <summary>
+        /// Moved Piece
+        /// </summary>
+        public Piece Piece { get; internal set; }
 
-        var matches = Regexes.RegexMove.Matches(move.ToLower());
+        /// <summary>
+        /// Original position of moved piece
+        /// </summary>
+        public Position OriginalPosition { get; internal set; }
 
-        if (matches.Count < 1)
-            throw new ChessArgumentException(null, "Move should match pattern: " + Regexes.MovePattern);
+        /// <summary>
+        /// New Position of moved piece
+        /// </summary>
+        public Position NewPosition { get; internal set; }
 
-        foreach (var group in matches[0].Groups.Values)
+        /// <summary>
+        /// Captured piece (if exist) or null
+        /// </summary>
+        public Piece CapturedPiece { get; internal set; }
+
+        /// <summary>
+        /// Move additional parameter
+        /// This property gives move information about a move
+        /// When one of the following moves occurs, we need info about:
+        /// 1. Promotion: To which figure (Queen or another)?
+        /// 2. Castle: King/Queen side castle?
+        /// 3. En Passant: What is the position of the pawn that has been captured?
+        /// </summary>
+        public IMoveParameter Parameter { get; internal set; }
+
+        /// <summary>
+        /// Move places opponent's king in check? => true
+        /// </summary>
+        public bool IsCheck { get; internal set; }
+
+        /// <summary>
+        /// Move places opponent's king in checkmate => true
+        /// </summary>
+        public bool IsMate { get; internal set; }
+
+        /// <summary>
+        /// Move in SAN Notation<br/>
+        /// -> Use board.MoveToSan() to get san string for this move according to your board positions
+        /// </summary>
+        public string San { get; internal set; }
+
+        /// <summary>
+        /// Move is En Passant
+        /// </summary>
+        public bool IsEnPassant => Parameter is MoveEnPassant;
+
+        /// <summary>
+        /// Move is castling
+        /// </summary>
+        public bool IsCastling => Parameter is MoveCastle;
+
+        /// <summary>
+        /// Move is promotion
+        /// </summary>
+        public bool IsPromotion => Parameter is MovePromotion;
+
+        /// <summary>
+        /// Promoted piece or null when there is no promotion.
+        /// </summary>
+        public Piece Promotion => Parameter is MovePromotion promotion ? new Piece(Piece.Color, promotion.PromotionResult) : null;
+
+        /// <summary>
+        /// Initializes new Move object by given positions
+        /// </summary>
+        public Move(Position originalPosition, Position newPosition)
         {
-            if (!group.Success) continue;
+            OriginalPosition = originalPosition;
+            NewPosition = newPosition;
+        }
 
-            switch (group.Name)
+        /// <summary>
+        /// Initializes new Move from long move notation
+        /// </summary>
+        /// <param name="move">
+        /// Move as long string<br/>
+        /// ex.:{wr - a1 - h8 - bq - e.p. - +}<br/>
+        /// Or: {a1 - h8}<br/>
+        /// See: move.ToString()
+        /// </param>
+        /// <exception cref="ChessArgumentException">Move didn't match regex pattern</exception>
+        public Move(string move)
+        {
+            move = move.ToLower();
+
+            var matches = Regexes.RegexMove.Matches(move.ToLower());
+
+            if (matches.Count < 1)
+                throw new ChessArgumentException(null, "Move should match pattern: " + Regexes.MovePattern);
+
+            foreach (Group group in matches[0].Groups)
             {
-                case "2":
-                    Piece = new(group.Value);
-                    break;
-                case "3":
-                    OriginalPosition = new(group.Value);
-                    break;
-                case "4":
-                    NewPosition = new(group.Value);
-                    break;
-                case "6":
-                    CapturedPiece = new(group.Value);
-                    break;
-                case "8":
-                    Parameter = IMoveParameter.FromString(group.Value);
-                    break;
-                case "10":
-                    if (group.Value == "+")
-                        IsCheck = true;
-                    else if (group.Value == "#")
-                    {
-                        IsCheck = true;
-                        IsMate = true;
-                    }
-                    else if (group.Value == "$")
-                        IsMate = true;
-                    break;
+                if (!group.Success) continue;
+
+                switch (group.Name)
+                {
+                    case "2":
+                        Piece = new Piece(group.Value);
+                        break;
+                    case "3":
+                        OriginalPosition = new Position(group.Value);
+                        break;
+                    case "4":
+                        NewPosition = new Position(group.Value);
+                        break;
+                    case "6":
+                        CapturedPiece = new Piece(group.Value);
+                        break;
+                    case "8":
+                        Parameter = IMoveParameter.FromString(group.Value);
+                        break;
+                    case "10":
+                        if (group.Value == "+")
+                            IsCheck = true;
+                        else if (group.Value == "#")
+                        {
+                            IsCheck = true;
+                            IsMate = true;
+                        }
+                        else if (group.Value == "$")
+                            IsMate = true;
+                        break;
+                }
             }
         }
-    }
 
-    /// <summary>
-    /// Initializes new Move object by given positions
-    /// </summary>
-    public Move(string originalPos, string newPos)
-    {
-        OriginalPosition = new(originalPos);
-        NewPosition = new(newPos);
-    }
-
-    internal Move(Move source, PromotionType promotion)
-    {
-        Piece = source.Piece;
-        OriginalPosition = source.OriginalPosition;
-        NewPosition = source.NewPosition;
-        CapturedPiece = source.CapturedPiece;
-        Parameter = new MovePromotion(promotion);
-        IsCheck = source.IsCheck;
-        IsMate = source.IsMate;
-        San = source.San;
-    }
-
-    internal Move(Move source)
-    {
-        if (source.Piece is not null)
-            Piece = new Piece(source.Piece);
-
-        OriginalPosition = new Position(source.OriginalPosition.X, source.OriginalPosition.Y);
-        NewPosition = new Position(source.NewPosition.X, source.NewPosition.Y);
-
-        if (source.CapturedPiece is not null)
-            CapturedPiece = new Piece(source.CapturedPiece);
-
-        if (source.Parameter is not null)
-            Parameter = IMoveParameter.FromString(source.Parameter.ShortStr);
-
-        IsCheck = source.IsCheck;
-        IsMate = source.IsMate;
-        San = source.San;
-    }
-
-    /// <summary>
-    /// Needed to Generate move from SAN in ChessConversions
-    /// </summary>
-    internal Move()
-    {
-        OriginalPosition = new();
-        NewPosition = new();
-    }
-
-    /// <summary>
-    /// Long move notation as: <br/>
-    /// {wr - a1 - h8 - bq - e.p. - +}<br/>
-    /// Or: {a1 - h8}
-    /// </summary>
-    public override string ToString()
-    {
-        StringBuilder builder = new();
-
-        builder.Append('{');
-
-        if (Piece is not null)
-            builder.Append(Piece + " - ");
-
-        builder.Append(OriginalPosition + " - " + NewPosition);
-
-        if (CapturedPiece is not null)
-            builder.Append(" - " + CapturedPiece);
-
-        if (Parameter is not null)
-            builder.Append(" - " + Parameter.ShortStr);
-
-        if (IsCheck)
+        /// <summary>
+        /// Initializes new Move object by given positions
+        /// </summary>
+        public Move(string originalPos, string newPos)
         {
-            if (IsMate)
-                builder.Append(" - #");
-            else
-                builder.Append(" - +");
+            OriginalPosition = new Position(originalPos);
+            NewPosition = new Position(newPos);
         }
-        else if (IsMate)
-            builder.Append(" - $");
 
-        builder.Append('}');
+        internal Move(Move source, PromotionType promotion)
+        {
+            Piece = source.Piece;
+            OriginalPosition = source.OriginalPosition;
+            NewPosition = source.NewPosition;
+            CapturedPiece = source.CapturedPiece;
+            Parameter = new MovePromotion(promotion);
+            IsCheck = source.IsCheck;
+            IsMate = source.IsMate;
+            San = source.San;
+        }
 
-        return builder.ToString();
+        internal Move(Move source)
+        {
+            if (source.Piece != null)
+                Piece = new Piece(source.Piece);
+
+            OriginalPosition = new Position(source.OriginalPosition.X, source.OriginalPosition.Y);
+            NewPosition = new Position(source.NewPosition.X, source.NewPosition.Y);
+
+            if (source.CapturedPiece != null)
+                CapturedPiece = new Piece(source.CapturedPiece);
+
+            if (source.Parameter != null)
+                Parameter = IMoveParameter.FromString(source.Parameter.ShortStr);
+
+            IsCheck = source.IsCheck;
+            IsMate = source.IsMate;
+            San = source.San;
+        }
+
+        /// <summary>
+        /// Needed to Generate move from SAN in ChessConversions
+        /// </summary>
+        internal Move()
+        {
+            OriginalPosition = new Position();
+            NewPosition = new Position();
+        }
+
+        /// <summary>
+        /// Long move notation as: <br/>
+        /// {wr - a1 - h8 - bq - e.p. - +}<br/>
+        /// Or: {a1 - h8}
+        /// </summary>
+        public override string ToString()
+        {
+            StringBuilder builder = new StringBuilder();
+
+            builder.Append('{');
+
+            if (Piece != null)
+                builder.Append(Piece + " - ");
+
+            builder.Append(OriginalPosition + " - " + NewPosition);
+
+            if (CapturedPiece != null)
+                builder.Append(" - " + CapturedPiece);
+
+            if (Parameter != null)
+                builder.Append(" - " + Parameter.ShortStr);
+
+            if (IsCheck)
+            {
+                if (IsMate)
+                    builder.Append(" - #");
+                else
+                    builder.Append(" - +");
+            }
+            else if (IsMate)
+                builder.Append(" - $");
+
+            builder.Append('}');
+
+            return builder.ToString();
+        }
     }
 }
