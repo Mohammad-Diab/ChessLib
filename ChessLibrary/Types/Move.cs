@@ -176,8 +176,13 @@ namespace Chess
             if (source.CapturedPiece != null)
                 CapturedPiece = new Piece(source.CapturedPiece);
 
-            if (source.Parameter != null)
-                Parameter = IMoveParameter.FromString(source.Parameter.ShortStr);
+            if (source.Parameter is { } param)
+            {
+                Parameter = IMoveParameter.FromString(param.ShortStr);
+
+                if (param is MoveEnPassant src && Parameter is MoveEnPassant dst)
+                    dst.CapturedPawnPosition = src.CapturedPawnPosition;
+            }
 
             IsCheck = source.IsCheck;
             IsMate = source.IsMate;

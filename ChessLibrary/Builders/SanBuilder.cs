@@ -154,7 +154,7 @@ namespace Chess
         {
             san = null;
 
-            if (move == null || move.HasValue)
+            if (move == null || !move.HasValue)
                 return (false, new ChessArgumentException(board, "Given move is null or doesn't have valid positions values"));
 
             Span<char> span = stackalloc char[10];
