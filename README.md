@@ -1,5 +1,5 @@
 > [!NOTE]
-> **This is a fork** of the [Gera Chess Library](https://github.com/Geras1mleo/Chess) 1.2.0 by Sviatoslav Harasymchuk, adapted for **.NET Standard 2.1** so it also runs in **Unity**. It is used in production in a Unity 3D chess game.
+> **This is a fork** of the [Gera Chess Library](https://github.com/Geras1mleo/Chess) 1.2.0 by Sviatoslav Harasymchuk, adapted for **.NET Standard 2.1** so it also runs in **Unity**. It is used in production in [Chess3D](https://github.com/Mohammad-Diab/Chess3D-SVU-F24-BCG601), a Unity 3D chess game.
 >
 > - **Download:** [Releases](https://github.com/Mohammad-Diab/ChessLib/releases). `ChessLibrary-v1.0.0-netstandard2.1.zip` contains `ChessLibrary.dll` and its dependency `Ardalis.SmartEnum.dll`.
 > - **Unity:** copy both DLLs into `Assets/Plugins`.
