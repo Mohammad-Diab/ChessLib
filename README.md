@@ -1,3 +1,16 @@
+> [!NOTE]
+> **This is a fork** of the [Gera Chess Library](https://github.com/Geras1mleo/Chess) 1.2.0 by Sviatoslav Harasymchuk, adapted for **.NET Standard 2.1** so it also runs in **Unity**. It is used in production in a Unity 3D chess game.
+>
+> - **Download:** [Releases](https://github.com/Mohammad-Diab/ChessLib/releases). `ChessLibrary-v1.0.0-netstandard2.1.zip` contains `ChessLibrary.dll` and its dependency `Ardalis.SmartEnum.dll`.
+> - **Unity:** copy both DLLs into `Assets/Plugins`.
+> - **.NET:** reference `ChessLibrary.dll` and add the `Ardalis.SmartEnum` NuGet package.
+> - **Changes from the original:**
+>   - targets .NET Standard 2.1 instead of .NET 8.0
+>   - fixes a logic error in `SanBuilder.TryParse`
+>   - improves null checks and parameter handling
+>
+> The rest of this README is the original library's documentation. Where it mentions **.NET 8.0** or the **Gera.Chess NuGet package**, that refers to the original, not this fork.
+
 <p align="center">
   <img width="128" align="center" src="https://user-images.githubusercontent.com/67554762/171267199-45341351-5968-4f68-802d-2e80136ea4ab.png">
 </p>
